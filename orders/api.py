@@ -3,36 +3,47 @@ from uuid import UUID
 from starlette.responses import Response
 from starlette import status
 from orders.app import app
-from orders.models import CreateOrderSchema
+from orders.models import CreateOrderSchema, GetOrdersSchema
 
 orders = {
     "3d82eea9-7498-430f-9344-7fca4580fa62": {
         "id": "3d82eea9-7498-430f-9344-7fca4580fa62",
         "status": "delivered",
         "created": datetime.utcnow(),
-        "items": {
+        "items": [{
             "product": "cappuccino",
             "size": "medium",
             "quantity": 1
-        }
+        }]
     },
     "553ed79e-0542-46e6-9761-41fc1eed6005": {
         "id": "3d82eea9-7498-430f-9344-7fca4580fa62",
         "status": "delivered",
         "created": datetime.utcnow(),
-        "items": {
+        "items": [{
             "product": "cappuccino",
             "size": "medium",
             "quantity": 1
-        }
+        }]
     }
 }
 
 
-@app.get("/orders", status_code=status.HTTP_200_OK)
+@app.get("/orders", response_model=GetOrdersSchema, status_code=status.HTTP_200_OK)
 def get_orders():
-    return {"orders": orders}
-
+    # return list(orders.values())
+    return [
+        {
+            "id": "3d82eea9-7498-430f-9344-7fca4580fa62",
+            "status": "delivered",
+            "created": datetime.utcnow(),
+            "items": [{
+                "product": "cappuccino",
+                "size": "medium",
+                "quantity": 1
+            }]
+        }
+    ]
 
 @app.post("/orders", status_code=status.HTTP_201_CREATED)
 def create_order():

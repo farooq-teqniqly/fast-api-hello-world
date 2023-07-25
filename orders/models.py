@@ -25,13 +25,13 @@ class OrderItemSchema(BaseModel):
     size: Size
     quantity: Optional[conint(ge=1, strict=True)] = 1
 
-    @field_validator("quantity")
-    @classmethod
-    def ensure_quantity_non_nullable(cls, value: int) -> int:
-        if value is None:
-            raise ValueError("Assign a value to Quantity.")
-
-        return value
+    # @field_validator("quantity")
+    # @classmethod
+    # def ensure_quantity_non_nullable(cls, value: int) -> int:
+    #     if value is None:
+    #         raise ValueError("Assign a value to Quantity.")
+    #
+    #     return value
 
 
 class CreateOrderSchema(BaseModel):
@@ -39,9 +39,9 @@ class CreateOrderSchema(BaseModel):
 
 
 class GetOrderSchema(BaseModel):
-    id: UUID
-    created: datetime
+    id: str
     status: Status
+    created: datetime
     items: conlist(OrderItemSchema, min_length=1)
 
 
