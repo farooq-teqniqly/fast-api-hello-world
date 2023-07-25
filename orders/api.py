@@ -3,6 +3,7 @@ from uuid import UUID
 from starlette.responses import Response
 from starlette import status
 from orders.app import app
+from orders.models import CreateOrderSchema
 
 orders = {
     "3d82eea9-7498-430f-9344-7fca4580fa62": {
@@ -38,7 +39,17 @@ def create_order():
     return orders["3d82eea9-7498-430f-9344-7fca4580fa62"]
 
 
-@app.get("/orders/[order_id]")
+@app.put("/orders/{order_id}", status_code=status.HTTP_200_OK)
+def update_order(order_id: UUID):
+    order = orders.get(str(order_id))
+
+    if order is None:
+        return Response(status_code=status.HTTP_404_NOT_FOUND)
+
+    return order
+
+
+@app.get("/orders/[order_id]", status_code=status.HTTP_200_OK)
 def get_order(order_id: UUID):
     order = orders.get(str(order_id))
 
